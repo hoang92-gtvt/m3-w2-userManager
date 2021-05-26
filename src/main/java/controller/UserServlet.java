@@ -8,6 +8,7 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +24,7 @@ public class UserServlet extends HttpServlet {
         }
         switch(action){
             case "add":
+                showFormAddUser(request,response);
                 break;
             case "edit":
                 break;
@@ -34,6 +36,19 @@ public class UserServlet extends HttpServlet {
             default:
                 showAllUser(request,response);
                 break;
+        }
+
+    }
+
+    private void showFormAddUser(HttpServletRequest request, HttpServletResponse response) {
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/users/creat.jsp");
+
+        try {
+            dispatcher.forward(request,response);
+        } catch (ServletException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
     }
@@ -51,6 +66,40 @@ public class UserServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String action = request.getParameter("action");
+        if(action == null){
+            action = "";
+        }
+        switch(action){
+            case "add":
+                AddUser(request,response);
+                break;
 
     }
+}
+
+    private void AddUser(HttpServletRequest request, HttpServletResponse response) {
+
+        String name = request.getParameter("name");
+        String email = request.getParameter("email");
+        String country = request.getParameter("country");
+
+        User newuser = new User(name,email,country);
+
+        try {
+             userDao.insertUser(newuser);
+             showAllUser(request,response);
+
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } catch (ServletException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
 }

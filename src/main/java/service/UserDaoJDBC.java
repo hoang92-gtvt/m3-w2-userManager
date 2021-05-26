@@ -34,6 +34,17 @@ public class UserDaoJDBC implements IUserDao{
 
     @Override
     public void insertUser(User user) throws SQLException {
+         Connection co = getConnection();
+         String add = "insert into users(name, email, country) value (?,?,?) ";
+
+         PreparedStatement preparedStatement = co.prepareStatement(add);
+         preparedStatement.setString(1,user.getName());
+         preparedStatement.setString(2,user.getEmail());
+         preparedStatement.setString(3,user.getCountry());
+
+         int index = preparedStatement.executeUpdate();
+
+
 
     }
 

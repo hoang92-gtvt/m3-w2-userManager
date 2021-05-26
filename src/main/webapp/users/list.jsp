@@ -13,8 +13,8 @@
 </head>
 <body>
     <h1>Danh sách người dùng</h1>
-    <a href="">Thêm người dùng mới</a> <br>
-    <table boder ="1px">
+    <a href="/user?action=add">Thêm người dùng mới</a> <br>
+    <table border="1" style="solid-color: black">
         <tr>
             <th>STT</th>
             <th>Tên</th>

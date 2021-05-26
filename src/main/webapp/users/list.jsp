@@ -20,14 +20,22 @@
             <th>Tên</th>
             <th>Email</th>
             <th>Country</th>
+            <th>Sửa</th>
+            <th>Xóa</th>
+            <th>Detail</th>
 
         </tr>
         <c:forEach items="${users}" var="user">
         <tr>
-            <th>${user.id}</th>
-            <th>${user.name}</th>
-            <th>${user.email}</th>
-            <th>${user.country}</th>
+            <td>${user.id}</td>
+            <td>${user.name}</td>
+            <td>${user.email}</td>
+            <td>${user.country}</td>
+
+            <td><a href='/user?action=edit&id=${user.id}'>edit</a></td>
+            <td><a href="/user?action=delete&id=${user.id}">delete</a></td>
+            <td><a href="/user?action=detail&id=${user.id}">detail</a></td>
+
 
         </tr>
         </c:forEach>

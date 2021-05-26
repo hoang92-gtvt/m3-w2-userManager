@@ -27,6 +27,7 @@ public class UserServlet extends HttpServlet {
                 showFormAddUser(request,response);
                 break;
             case "edit":
+                showFormEdit(request,response);
                 break;
             case "delete":
                 break;
@@ -37,6 +38,20 @@ public class UserServlet extends HttpServlet {
                 showAllUser(request,response);
                 break;
         }
+
+    }
+
+    private void showFormEdit(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/users/formEdit.jsp");
+
+        int id = Integer.parseInt(request.getParameter("id"));
+
+        User user = userDao.getUserById(id);
+
+        request.setAttribute("user", user);
+
+        dispatcher.forward(request,response);
+
 
     }
 
@@ -74,9 +89,38 @@ public class UserServlet extends HttpServlet {
             case "add":
                 AddUser(request,response);
                 break;
+            case "edit":
+                editUser(request,response);
 
+                break;
     }
 }
+
+    private void editUser(HttpServletRequest request, HttpServletResponse response) {
+        int id = Integer.parseInt(request.getParameter("id"));
+        String name = request.getParameter("name");
+        String email = request.getParameter("email");
+        String country = request.getParameter("country");
+
+        User  editUser = new User(id,name, email, country);
+
+        try {
+            boolean check = userDao.updateUser(editUser);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+
+
+        try {
+            showAllUser(request,response);
+        } catch (ServletException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
 
     private void AddUser(HttpServletRequest request, HttpServletResponse response) {
 

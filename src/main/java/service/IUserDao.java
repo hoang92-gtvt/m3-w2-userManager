@@ -18,4 +18,6 @@ public interface IUserDao {
 
     public boolean updateUser(User user) throws SQLException;
 
+    public User getUserById(int id);
+
 }

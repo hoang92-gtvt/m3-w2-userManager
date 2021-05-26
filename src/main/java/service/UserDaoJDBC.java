@@ -91,6 +91,47 @@ public class UserDaoJDBC implements IUserDao{
 
     @Override
     public boolean updateUser(User user) throws SQLException {
-        return false;
+        Connection co = getConnection();
+        String update = "update Users set name =?, email=?, country=?  where id=?";
+
+
+        PreparedStatement preparedStatement = co.prepareStatement(update);
+        preparedStatement.setString(1,user.getName());
+        preparedStatement.setString(2,user.getEmail());
+        preparedStatement.setString(3,user.getCountry());
+        preparedStatement.setInt(4,user.getId());
+
+        System.out.println(preparedStatement);
+        int number = preparedStatement.executeUpdate();
+
+        if(number<1){
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public User getUserById(int id) {
+        User editUser= null;
+        Connection co = getConnection();
+        String query = "select * from users where id =?";
+        try {
+            PreparedStatement preparedStatement = co.prepareStatement(query);
+            preparedStatement.setInt(1, id);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while(resultSet.next()){
+                String name = resultSet.getString("name");
+                String email = resultSet.getString("email");
+                String country = resultSet.getString("country");
+
+                editUser = new User(name, email, country);
+            }
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+        return editUser;
     }
 }

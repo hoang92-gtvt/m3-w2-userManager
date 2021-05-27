@@ -30,8 +30,10 @@ public class UserServlet extends HttpServlet {
                 showFormEdit(request,response);
                 break;
             case "delete":
+                showComfrim(request, response);
                 break;
             case "detail":
+                showDetail(request, response);
                 break;
 
             default:
@@ -39,6 +41,30 @@ public class UserServlet extends HttpServlet {
                 break;
         }
 
+    }
+
+    private void showDetail(HttpServletRequest request, HttpServletResponse response) {
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/users/detail.jsp");
+
+        int id = Integer.parseInt(request.getParameter("id"));
+
+        User user = userDao.getUserById(id);
+
+        request.setAttribute("user", user);
+
+        try {
+            dispatcher.forward(request,response);
+        } catch (ServletException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void showComfrim(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/users/confrim.jsp");
+
+        dispatcher.forward(request,response);
     }
 
     private void showFormEdit(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -93,8 +119,33 @@ public class UserServlet extends HttpServlet {
                 editUser(request,response);
 
                 break;
+            case "delete":
+                deleteUser(request, response);
+                break;
+
+            default:
+                showAllUser(request, response);
     }
 }
+
+    private void deleteUser(HttpServletRequest request, HttpServletResponse response)  {
+        int id = Integer.parseInt(request.getParameter("id"));
+
+
+        try {
+            userDao.deleteUser(id);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        try {
+            showAllUser(request, response);
+        } catch (ServletException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
 
     private void editUser(HttpServletRequest request, HttpServletResponse response) {
         int id = Integer.parseInt(request.getParameter("id"));

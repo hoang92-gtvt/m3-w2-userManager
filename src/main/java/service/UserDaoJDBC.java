@@ -86,7 +86,19 @@ public class UserDaoJDBC implements IUserDao{
 
     @Override
     public boolean deleteUser(int id) throws SQLException {
-        return false;
+        Connection co = getConnection();
+
+        String delete = "delete from users where id=?";
+
+        PreparedStatement preparedStatement = co.prepareStatement(delete);
+        preparedStatement.setInt(1, id);
+
+        int number= preparedStatement.executeUpdate();
+
+        if(number<1){
+            return false;
+        }
+        return true;
     }
 
     @Override
